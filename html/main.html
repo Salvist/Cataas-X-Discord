@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CatCord</title>
+		<style>
+			body, form{
+				margin: 0 auto;
+				max-width:1280px;
+				overflow-x:hidden;
+			}
+			fieldset{
+				display: flex;
+			}
+			input#artist{
+				flex-grow:100;
+				margin: 0 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Cataas X Discord</h1>
+		<img src="../images/banner.jpg" alt="Cataas X Discord" />
+		<h4>Type cat in the field and press Submit.</h4>
+		<form action="search" method="get">
+			<fieldset>
+				<label for="field">Field:</label>
+				<input id="field" name="field" type="text" />
+				<input type="submit" value="Submit" />
+			</fieldset>
+		</form>
+	</body>
+</html>

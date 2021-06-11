@@ -1,0 +1,37 @@
+title Cataas X Discord Sequence Diagram
+
+participant Cataas API
+participant User
+participant Server
+participant Discord API
+
+User->(1)Server:Browser requests "/" (root of our site)
+Server->(1)User: Sends 200 Okay, Returns index.html (form)
+User->(1)Server:User fills out form (supplies field: "cat" or "cat/gif") \nBrowser requests "/search?field="
+
+Server->(2)Cataas API:Server GET request to Cataas API \nbased on the field parameter.
+Cataas API->(1)Server:Cataas API returns jpg or gif image \nto server and saves it locally.
+Server->(1)User:Sends 301 redirect to Discord authorization \nwith queries client id, scope, response type, \nredirect uri, and prompt
+
+User->(1)Discord API: Browser sees 301 and redirect to \nDiscord Authorization with given queries.
+
+alt if user already logged in, this may be skipped
+Discord API->(1)User:Sends login form
+User->(1)Discord API:User logs in
+end 
+
+Discord API->(1)User: Ask user to give permission(s) according to the scope
+User->(1)Discord API: User allows and authorize the permission(s)
+Discord API->(1)User: Redirect browser to the redirect uri we gave \nand attach the code as a query.
+
+User->(1)Server: Server will search param the code based on the URL
+Server->(1)Discord API: POST request with client id, client secret, \ngrant type, code, and redirect uri \nto Discord API to get access token
+Discord API->(1)Server: Response and return a token \nassuming everything is ok.
+Server->(1)Discord API: GET request discord user info using the token \nhttps://discord.com/api/users/@me
+Discord API->(1)Server: Return user discord info
+
+note over Server: Parse discord info, retrieve nickname, user id, and avatar id
+
+Server->(1)User: Redirect 301 to /posted with query of \nretrieved discord info
+
+note over User: Shows cat image, discord nickname, \ndiscord id, and discord avatar image.
